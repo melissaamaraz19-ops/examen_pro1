@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Editar Materia</h3>
+<form method="post" class="card p-3">
+  <div class="row g-2">
+    <div class="col-md-4"><label>Nombre</label><input name="nombre" class="form-control" value="{{ materia.nombre }}" required></div>
+    <div class="col-md-3">
+      <label>Turno</label>
+      <select name="turno" class="form-select">
+        <option {% if materia.turno.value=='MATUTINO' %}selected{% endif %}>MATUTINO</option>
+        <option {% if materia.turno.value=='VESPERTINO' %}selected{% endif %}>VESPERTINO</option>
+      </select>
+    </div>
+    <div class="col-md-3"><label>Bloques por sesión</label><input type="number" name="bloques_duracion" value="{{ materia.bloques_duracion }}" min="1" max="8" class="form-control"></div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+{% endblock %}

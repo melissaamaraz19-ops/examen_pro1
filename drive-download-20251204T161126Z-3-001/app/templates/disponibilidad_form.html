@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block content %}
+<h3>Disponibilidad de Docentes</h3>
+<form method="post" class="card p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label>Docente</label>
+      <select name="docente_id" class="form-select">
+        {% for d in docentes %}
+        <option value="{{ d.id }}">{{ d.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Día</label>
+      <select name="dia" class="form-select">
+        {% for d in ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES'] %}
+        <option>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Turno</label>
+      <select name="turno" class="form-select">
+        <option>MATUTINO</option>
+        <option>VESPERTINO</option>
+      </select>
+    </div>
+    <div class="col-md-1">
+      <label>B1</label><input class="form-control" name="b1" type="number" min="1" max="8" value="1" />
+    </div>
+    <div class="col-md-1">
+      <label>B2</label><input class="form-control" name="b2" type="number" min="1" max="8" value="2" />
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Agregar</button></div>
+</form>
+
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th>Docente</th>
+      <th>Día</th>
+      <th>Turno</th>
+      <th>Bloques</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in disp %}
+    <tr>
+      <td>{{ r.docente.nombre }}</td>
+      <td>{{ r.dia }}</td>
+      <td>{{ r.turno.value }}</td>
+      <td>{{ r.bloque_inicio }}-{{ r.bloque_fin }}</td>
+      <td>
+        <a class="btn btn-sm btn-secondary" href="{{ url_for('main.disponibilidad_editar', id=r.id) }}">Editar</a>
+        <a class="btn btn-sm btn-danger" href="{{ url_for('main.disponibilidad_borrar', id=r.id) }}"
+          onclick="return confirm('¿Eliminar?')">Borrar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

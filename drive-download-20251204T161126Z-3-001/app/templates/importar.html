@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-3">Importación Masiva de Datos</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h5 class="mb-3">📁 Subir archivo Excel</h5>
+
+            <form method="post" enctype="multipart/form-data" id="formImport">
+                <div class="mb-3">
+                    <label class="form-label">Tipo de datos a importar:</label>
+                    <select name="tipo" class="form-select" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="materias">Materias</option>
+                        <option value="docentes">Docentes</option>
+                        <option value="grupos">Grupos</option>
+                        <option value="disponibilidad">Disponibilidad Docentes</option>
+                        <option value="plan">Plan de Estudios (Materia-Grupo)</option>
+                        <option value="completo">Importación Completa</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Archivo Excel (.xlsx):</label>
+                    <input type="file" name="archivo" class="form-control" accept=".xlsx,.xls" required />
+                    <div class="form-text">
+                        Formatos aceptados: .xlsx, .xls (Excel)
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="limpiarAntes" name="limpiar_antes" />
+                    <label class="form-check-label" for="limpiarAntes">
+                        ⚠️ Limpiar datos existentes antes de importar
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    📤 Importar Datos
+                </button>
+                <a href="{{ url_for('main.descargar_plantilla') }}" class="btn btn-secondary">
+                    📥 Descargar Plantilla Excel
+                </a>
+            </form>
+
+            <div id="progreso" class="mt-3" style="display: none;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                        style="width: 100%">
+                        Procesando...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 bg-dark">
+            <h6 class="mb-3">📋 Formatos de Excel</h6>
+
+            <p class="small mb-2"><strong>Materias:</strong></p>
+            <ul class="small mb-3">
+                <li>Columnas: nombre, turno, bloques_duracion</li>
+                <li>turno: MATUTINO o VESPERTINO</li>
+            </ul>
+
+            <p class="small mb-2"><strong>Docentes:</strong></p>
+            <ul class="small mb-3">
+                <li>Columnas: nombre, correo, materias</li>
+                <li>materias: separados por punto y coma</li>
+            </ul>
+
+            <p class="small mb-2"><strong>Grupos:</strong></p>
+            <ul class="small mb-3">
+                <li>Columnas: nombre, turno</li>
+            </ul>
+
+            <p class="small mb-2"><strong>Disponibilidad:</strong></p>
+            <ul class="small mb-3">
+                <li>Columnas: docente, dia, turno, bloque_inicio, bloque_fin</li>
+            </ul>
+
+            <p class="small mb-2"><strong>Plan:</strong></p>
+            <ul class="small">
+                <li>Columnas: grupo, materia, sesiones_por_semana</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('formImport').addEventListener('submit', function () {
+        document.getElementById('progreso').style.display = 'block';
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %} {% block content %}
+<h3>Panel</h3>
+<div class="row g-3">
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Docentes<br /><b>{{ c_doc }}</b>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Materias<br /><b>{{ c_mat }}</b>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Grupos<br /><b>{{ c_grp }}</b>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Mapeos<br /><b>{{ c_map }}</b>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Disp.<br /><b>{{ c_disp }}</b>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card p-3 text-center bg-dark text-white">
+      Plan<br /><b>{{ c_plan }}</b>
+    </div>
+  </div>
+</div>
+
+<hr />
+<h5>Generar horario (GA)</h5>
+<form class="row g-2" method="post" action="{{ url_for('main.generar') }}">
+  <div class="col-auto">
+    <label class="form-label">Generaciones</label>
+    <input class="form-control" name="gens" type="number" value="60" />
+  </div>
+  <div class="col-auto">
+    <label class="form-label">Población</label>
+    <input class="form-control" name="tam" type="number" value="40" />
+  </div>
+  <div class="col-auto">
+    <label class="form-label">Elite</label>
+    <input class="form-control" name="elite" type="number" value="6" />
+  </div>
+  <div class="col-auto">
+    <label class="form-label">Seed</label>
+    <input
+      class="form-control"
+      name="seed"
+      type="text"
+      placeholder="opcional"
+    />
+  </div>
+  <div class="col-auto">
+    <label class="form-label">Ámbito</label>
+    <select class="form-select" name="scope">
+      <option value="BOTH">Ambos</option>
+      <option value="MATUTINO">Matutino</option>
+      <option value="VESPERTINO">Vespertino</option>
+    </select>
+  </div>
+  <div class="col-auto align-self-end">
+    <button class="btn btn-primary">Generar</button>
+  </div>
+</form>
+{% endblock %}

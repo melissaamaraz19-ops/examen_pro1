@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block content %}
+<h2 class="mb-3">Experimentos</h2>
+
+<form
+  class="card p-3 mb-4"
+  method="post"
+  action="{{ url_for('main.experimentos_run') }}"
+>
+  <div class="row g-2">
+    <div class="col-6 col-md-2">
+      <label class="form-label">Generaciones</label>
+      <input
+        type="number"
+        class="form-control"
+        name="gens"
+        value="60"
+        min="10"
+      />
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Población</label>
+      <input
+        type="number"
+        class="form-control"
+        name="tam"
+        value="40"
+        min="10"
+      />
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Elite</label>
+      <input
+        type="number"
+        class="form-control"
+        name="elite"
+        value="6"
+        min="1"
+      />
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label">Seed</label>
+      <input
+        type="text"
+        class="form-control"
+        name="seed"
+        placeholder="opcional"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label class="form-label">Ámbito</label>
+      <select class="form-select" name="scope">
+        <option value="BOTH">Ambos turnos</option>
+        <option value="MATUTINO">Matutino</option>
+        <option value="VESPERTINO">Vespertino</option>
+      </select>
+    </div>
+  </div>
+  <div class="mt-3">
+    <button class="btn btn-primary">Ejecutar experimento</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+  <table class="table table-sm table-dark align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Scope</th>
+        <th>Gens</th>
+        <th>Pop</th>
+        <th>Elite</th>
+        <th>Seed</th>
+        <th>Grupos</th>
+        <th>Best</th>
+        <th>Avg</th>
+        <th>Tiempo</th>
+        <th>Conf.Doc</th>
+        <th>Viol.Res</th>
+        <th>Viol.Disp</th>
+        <th>Bl.Día</th>
+        <th>Bl.Consec</th>
+        <th>Hrs35</th>
+        <th>Fitness</th>
+        <th>Restricc.</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.id }}</td>
+        <td>
+          {{ row.creado_en.strftime('%Y-%m-%d %H:%M') if row.creado_en else '-'
+          }}
+        </td>
+        <td>{{ row.scope }}</td>
+        <td>{{ row.generaciones }}</td>
+        <td>{{ row.poblacion }}</td>
+        <td>{{ row.elite }}</td>
+        <td>{{ row.seed or '-' }}</td>
+        <td>
+          {{ row.num_grupos_total or 0 }} (M:{{ row.num_grupos_m or 0 }}/V:{{
+          row.num_grupos_v or 0 }})
+        </td>
+        <td>{{ "%.2f"|format(row.best_final or 0) }}</td>
+        <td>{{ "%.2f"|format(row.avg_final or 0) }}</td>
+        <td>{{ "%.2f"|format(row.tiempo_total or 0) }}s</td>
+        <td>{{ row.conflictos_docente or 0 }}</td>
+        <td>{{ row.violacion_reserva or 0 }}</td>
+        <td>{{ row.violacion_disponibilidad or 0 }}</td>
+        <td>{{ row.exceso_bloques_dia or 0 }}</td>
+        <td>{{ row.exceso_bloques_consecutivos or 0 }}</td>
+        <td>{{ row.exceso_horas_semanales or 0 }}</td>
+        <td>
+          {% if row.fig_fitness %}
+          <a
+            target="_blank"
+            href="{{ url_for('static', filename=row.fig_fitness) }}"
+            >ver</a
+          >
+          {% else %}-{% endif %}
+        </td>
+        <td>
+          {% if row.fig_hard %}
+          <a
+            target="_blank"
+            href="{{ url_for('static', filename=row.fig_hard) }}"
+            >ver</a
+          >
+          {% else %}-{% endif %}
+        </td>
+        <td>
+          <form
+            action="{{ url_for('main.experimentos_borrar', exp_id=row.id) }}"
+            method="post"
+            onsubmit="return confirm('¿Borrar experimento {{ row.id }}?');"
+            style="display: inline"
+          >
+            <button class="btn btn-sm btn-danger">Borrar</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="20" class="text-center py-4">Sin experimentos aún.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

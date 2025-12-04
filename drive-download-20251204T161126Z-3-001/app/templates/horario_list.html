@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block content %}
+<h3>Horario generado</h3>
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th>Grupo</th>
+      <th>Día</th>
+      <th>Turno</th>
+      <th>Bloques</th>
+      <th>Materia</th>
+      <th>Docente</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in data %}
+    <tr>
+      <td>{{ r.grupo }}</td>
+      <td>{{ r.dia }}</td>
+      <td>{{ r.turno }}</td>
+      <td>{{ r.bloque }}</td>
+      <td>{{ r.materia }}</td>
+      <td>{{ r.docente }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

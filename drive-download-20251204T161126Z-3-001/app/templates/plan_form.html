@@ -1,0 +1,72 @@
+{% extends "base.html" %} {% block content %}
+<h3>Plan por Grupo (MateriaGrupo)</h3>
+<form method="post" class="card p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-md-3">
+      <label>Grupo</label>
+      <select name="grupo_id" class="form-select">
+        {% for g in grupos %}
+        <option value="{{ g.id }}">
+          {{ g.turno.value[0] }} - {{ g.nombre }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-5">
+      <label>Materia</label>
+      <select name="materia_id" class="form-select">
+        {% for m in materias %}
+        <option value="{{ m.id }}">
+          {{ m.turno.value[0] }} - {{ m.nombre }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label>Sesiones/semana</label
+      ><input
+        class="form-control"
+        name="sesiones"
+        type="number"
+        value="1"
+        min="1"
+        max="10"
+      />
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Agregar</button></div>
+</form>
+
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th>Grupo</th>
+      <th>Materia</th>
+      <th>Ses/sem</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in planes %}
+    <tr>
+      <td>{{ p.grupo.nombre }}</td>
+      <td>{{ p.materia.nombre }}</td>
+      <td>{{ p.sesiones_por_semana }}</td>
+      <td>
+        <a
+          class="btn btn-sm btn-secondary"
+          href="{{ url_for('main.plan_editar', id=p.id) }}"
+          >Editar</a
+        >
+        <a
+          class="btn btn-sm btn-danger"
+          href="{{ url_for('main.plan_borrar', id=p.id) }}"
+          onclick="return confirm('¿Eliminar?')"
+          >Borrar</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

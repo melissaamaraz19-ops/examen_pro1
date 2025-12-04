@@ -1,0 +1,190 @@
+{% extends "base.html" %} {% block content %}
+<h2 class="mb-3">🔍 Validación Pre-Generación</h2>
+
+<div class="card p-4">
+  <div id="validacionStatus" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Validando...</span>
+    </div>
+    <p class="mt-2">Analizando configuración del sistema...</p>
+  </div>
+
+  <div id="resultados" style="display: none">
+    <div id="resumenGlobal" class="alert mb-4"></div>
+
+    <div class="row g-3">
+      <!-- Docentes -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">👨‍🏫 Docentes</h5>
+          <div id="statusDocentes"></div>
+        </div>
+      </div>
+
+      <!-- Materias -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">📚 Materias</h5>
+          <div id="statusMaterias"></div>
+        </div>
+      </div>
+
+      <!-- Grupos -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">👥 Grupos</h5>
+          <div id="statusGrupos"></div>
+        </div>
+      </div>
+
+      <!-- Disponibilidad -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">📅 Disponibilidad</h5>
+          <div id="statusDisponibilidad"></div>
+        </div>
+      </div>
+
+      <!-- Plan de Estudios -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">📋 Plan de Estudios</h5>
+          <div id="statusPlan"></div>
+        </div>
+      </div>
+
+      <!-- Reservas -->
+      <div class="col-md-6">
+        <div class="card bg-dark p-3">
+          <h5 class="mb-3">🔒 Reservas</h5>
+          <div id="statusReservas"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-center">
+      <button
+        id="btnGenerar"
+        class="btn btn-primary btn-lg"
+        disabled
+        onclick="window.location.href='{{ url_for('main.index') }}';"
+      >
+        ✅ Proceder a Generar Horario
+      </button>
+      <button class="btn btn-secondary btn-lg" onclick="location.reload()">
+        🔄 Revalidar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function validarSistema() {
+    try {
+      console.log("🔍 Iniciando validación del sistema...");
+
+      const response = await fetch("/api/validar");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("✅ Validación completada:", data);
+
+      // Ocultar spinner
+      document.getElementById("validacionStatus").style.display = "none";
+      document.getElementById("resultados").style.display = "block";
+
+      // Resumen global
+      const resumen = document.getElementById("resumenGlobal");
+      if (data.valido) {
+        resumen.className = "alert alert-success mb-4";
+        resumen.innerHTML = `
+        <h4>✅ Sistema listo para generar horarios</h4>
+        <p class="mb-0">Todas las validaciones pasaron correctamente.</p>
+      `;
+        document.getElementById("btnGenerar").disabled = false;
+      } else {
+        resumen.className = "alert alert-warning mb-4";
+        resumen.innerHTML = `
+        <h4>⚠️ Se encontraron ${data.total_issues} problema(s)</h4>
+        <p class="mb-0">Revisa los detalles a continuación y corrige antes de generar.</p>
+      `;
+      }
+
+      // Renderizar cada categoría
+      renderStatus("statusDocentes", data.docentes);
+      renderStatus("statusMaterias", data.materias);
+      renderStatus("statusGrupos", data.grupos);
+      renderStatus("statusDisponibilidad", data.disponibilidad);
+      renderStatus("statusPlan", data.plan);
+      renderStatus("statusReservas", data.reservas);
+    } catch (error) {
+      console.error("❌ Error al validar:", error);
+
+      document.getElementById("validacionStatus").style.display = "none";
+      document.getElementById("resultados").style.display = "block";
+
+      const resumen = document.getElementById("resumenGlobal");
+      resumen.className = "alert alert-danger mb-4";
+      resumen.innerHTML = `
+      <h4>❌ Error al validar el sistema</h4>
+      <p class="mb-0">Error: ${error.message}</p>
+      <p class="mb-0 mt-2"><small>Verifica que el servidor esté funcionando correctamente.</small></p>
+    `;
+    }
+  }
+
+  function renderStatus(elementId, data) {
+    const el = document.getElementById(elementId);
+    let html = "";
+
+    // Mostrar OK
+    if (data.ok && data.ok.length > 0) {
+      html += '<div class="mb-2">';
+      data.ok.forEach((msg) => {
+        html += `<div class="text-success small mb-1">✓ ${escapeHtml(
+          msg
+        )}</div>`;
+      });
+      html += "</div>";
+    }
+
+    // Mostrar issues
+    if (data.issues && data.issues.length > 0) {
+      html += "<div>";
+      data.issues.forEach((issue) => {
+        html += `<div class="text-warning small mb-1">⚠ ${escapeHtml(
+          issue
+        )}</div>`;
+      });
+      html += "</div>";
+    }
+
+    if (html === "") {
+      html = '<div class="text-muted small">Sin datos</div>';
+    }
+
+    el.innerHTML = html;
+  }
+
+  function escapeHtml(text) {
+    const map = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+    return text.replace(/[&<>"']/g, (m) => map[m]);
+  }
+
+  // Ejecutar al cargar la página
+  window.addEventListener("load", function () {
+    console.log("🚀 Sistema de validación cargado");
+    validarSistema();
+  });
+</script>
+
+{% endblock %}

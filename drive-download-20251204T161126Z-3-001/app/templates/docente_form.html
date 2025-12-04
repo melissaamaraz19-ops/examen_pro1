@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block content %}
+<h3>Docentes</h3>
+<form method="post" class="card p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label>Nombre</label><input name="nombre" class="form-control" required />
+    </div>
+    <div class="col-md-4">
+      <label>Correo</label><input name="correo" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label>Materias impartibles</label>
+      <div class="border rounded p-2" style="max-height: 150px; overflow: auto">
+        {% for m in materias %}
+        <label class="d-block"
+          ><input type="checkbox" name="materias" value="{{ m.id }}" /> {{
+          m.turno.value[0] }} - {{ m.nombre }}</label
+        >
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Correo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in docentes %}
+    <tr>
+      <td>{{ d.nombre }}</td>
+      <td>{{ d.correo or '-' }}</td>
+      <td>
+        <a
+          class="btn btn-sm btn-secondary"
+          href="{{ url_for('main.docente_editar', id=d.id) }}"
+          >Editar</a
+        >
+        <a
+          class="btn btn-sm btn-danger"
+          href="{{ url_for('main.docente_borrar', id=d.id) }}"
+          onclick="return confirm('¿Eliminar?')"
+          >Borrar</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

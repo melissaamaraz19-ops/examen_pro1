@@ -1,0 +1,401 @@
+body {
+  background: #111;
+  color: #eee;
+}
+
+/* ========== MEJORAS GLOBALES DE TEXTO ========== */
+
+/* Todos los labels de formularios más visibles */
+label,
+.form-label {
+  color: #f0f0f0 !important;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Encabezados más visibles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #f5f5f5 !important;
+}
+
+/* Texto general más visible */
+p,
+span,
+div {
+  color: #e0e0e0;
+}
+
+/* ========== CARDS Y CONTENEDORES ========== */
+
+.card {
+  background: #1b1b1b;
+  border: 1px solid #333;
+}
+
+.card-header {
+  background: #252525;
+  border-bottom: 1px solid #333;
+  color: #f0f0f0;
+}
+
+/* ========== TABLAS ========== */
+
+.table {
+  background: #1b1b1b;
+}
+
+.table th {
+  color: #f0f0f0 !important;
+  font-weight: 600;
+}
+
+.table td {
+  color: #e0e0e0 !important;
+}
+
+.table-dark {
+  --bs-table-bg: #1b1b1b;
+  --bs-table-striped-bg: #232323;
+  --bs-table-hover-bg: #2b2b2b;
+  --bs-table-border-color: #333;
+  --bs-table-color: #e0e0e0;
+}
+
+/* ========== NAVBAR ========== */
+
+.navbar {
+  background: #1b1b1b;
+}
+
+.navbar-dark .navbar-brand {
+  color: #f0f0f0 !important;
+  font-weight: 600;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+  color: rgba(255, 255, 255, 1) !important;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========== MENÚ DESPLEGABLE ========== */
+
+.dropdown-menu {
+  background: #2b2b2b;
+  border: 1px solid #444;
+}
+
+.dropdown-item {
+  color: #f0f0f0 !important;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: #3b3b3b;
+  color: #fff !important;
+}
+
+/* ========== FORMULARIOS ========== */
+
+.form-control,
+.form-select {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  color: #f0f0f0;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #333;
+  border-color: #7ec8ff;
+  color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(126, 200, 255, 0.25);
+}
+
+.form-control::placeholder {
+  color: #888;
+}
+
+/* ========== CHECKBOXES Y RADIO BUTTONS ========== */
+
+/* Mejorar visibilidad de checkboxes */
+.form-check-label,
+label.d-block {
+  color: #f0f0f0 !important;
+  font-weight: 500;
+}
+
+.form-check-label:hover,
+label.d-block:hover {
+  color: #fff !important;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #7ec8ff;
+}
+
+/* Contenedor de materias impartibles */
+.border.rounded {
+  background: #1e1e1e;
+  border-color: #444 !important;
+}
+
+/* ========== BOTONES ========== */
+
+.btn {
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5c636a;
+  border-color: #565e64;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+.btn-sm {
+  font-size: 0.85rem;
+}
+
+/* ========== LINKS ========== */
+
+a {
+  color: #7ec8ff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #9dd8ff;
+  text-decoration: underline;
+}
+
+/* ========== ALERTAS ========== */
+
+.alert {
+  border: none;
+  color: #fff;
+}
+
+.alert-success {
+  background-color: #198754;
+}
+
+.alert-danger,
+.alert-error {
+  background-color: #dc3545;
+}
+
+.alert-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.alert-info {
+  background-color: #0dcaf0;
+  color: #000;
+}
+
+/* ========== TABLERO DE HORARIOS ========== */
+
+.cell-slot {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 4px;
+  border: 1px solid #3b3b3b;
+}
+
+.cell-slot .mat {
+  font-weight: 600;
+  color: #fff;
+}
+
+.cell-slot .doc {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  color: #fff;
+}
+
+.cell-slot .blk {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  color: #fff;
+}
+
+.celda-horario {
+  background: #2b2b2b;
+  min-height: 60px;
+}
+
+.tabla-horario td {
+  min-height: 60px;
+  vertical-align: top;
+  padding: 8px !important;
+}
+
+/* ========== TABS ========== */
+
+.nav-tabs {
+  border-bottom: 1px solid #444;
+}
+
+.nav-tabs .nav-link {
+  color: #ddd;
+  border: 1px solid transparent;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: #444 #444 #1b1b1b;
+  color: #fff;
+}
+
+.nav-tabs .nav-link.active {
+  color: #fff;
+  background-color: #1b1b1b;
+  border-color: #444 #444 #1b1b1b;
+}
+
+.tab-content {
+  border: 1px solid #444;
+  border-top: none;
+  padding: 1rem;
+  background: #1b1b1b;
+}
+
+/* ========== ESTADÍSTICAS DEL PANEL ========== */
+
+.text-center {
+  color: #f0f0f0;
+}
+
+.bg-dark.text-white {
+  color: #f0f0f0 !important;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media print {
+  .btn,
+  .nav-tabs,
+  .navbar {
+    display: none;
+  }
+
+  .table {
+    font-size: 0.7rem;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
+
+/* ========== SCROLLBAR PERSONALIZADO ========== */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1b1b1b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ========== UTILIDADES ========== */
+
+.text-muted {
+  color: #aaa !important;
+}
+
+.bg-dark {
+  background-color: #1b1b1b !important;
+}
+
+.border {
+  border-color: #444 !important;
+}
+
+/* ========== INPUTS ESPECÍFICOS ========== */
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+  background-color: #2b2b2b !important;
+  border-color: #444 !important;
+  color: #f0f0f0 !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  background-color: #333 !important;
+  border-color: #7ec8ff !important;
+  color: #fff !important;
+}

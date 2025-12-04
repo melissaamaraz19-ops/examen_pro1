@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block content %}
+<h3>Materias</h3>
+<form method="post" class="card p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label>Nombre</label><input name="nombre" class="form-control" required />
+    </div>
+    <div class="col-md-3">
+      <label>Turno</label>
+      <select name="turno" class="form-select">
+        <option>MATUTINO</option>
+        <option>VESPERTINO</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Bloques por sesión</label
+      ><input
+        type="number"
+        name="bloques_duracion"
+        value="2"
+        min="1"
+        max="8"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Turno</th>
+      <th>Duración</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in materias %}
+    <tr>
+      <td>{{ m.nombre }}</td>
+      <td>{{ m.turno.value }}</td>
+      <td>{{ m.bloques_duracion }}</td>
+      <td>
+        <a
+          class="btn btn-sm btn-secondary"
+          href="{{ url_for('main.materia_editar', id=m.id) }}"
+          >Editar</a
+        >
+        <a
+          class="btn btn-sm btn-danger"
+          href="{{ url_for('main.materia_borrar', id=m.id) }}"
+          onclick="return confirm('¿Eliminar?')"
+          >Borrar</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

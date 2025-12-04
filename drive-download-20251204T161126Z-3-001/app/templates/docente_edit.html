@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block content %}
+<h3>Editar Docente</h3>
+<form method="post" class="card p-3">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label>Nombre</label
+      ><input
+        name="nombre"
+        class="form-control"
+        value="{{ docente.nombre }}"
+        required
+      />
+    </div>
+    <div class="col-md-4">
+      <label>Correo</label
+      ><input
+        name="correo"
+        class="form-control"
+        value="{{ docente.correo or '' }}"
+      />
+    </div>
+    <div class="col-md-4">
+      <label>Materias impartibles</label>
+      <div class="border rounded p-2" style="max-height: 150px; overflow: auto">
+        {% for m in materias %}
+        <label class="d-block"
+          ><input
+            type="checkbox"
+            name="materias"
+            value="{{ m.id }}"
+            {%
+            if
+            m.id
+            in
+            impartibles
+            %}checked{%
+            endif
+            %}
+          />
+          {{ m.turno.value[0] }} - {{ m.nombre }}</label
+        >
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Editar Grupo</h3>
+<form method="post" class="card p-3">
+  <div class="row g-2">
+    <div class="col-md-4"><label>Nombre</label><input name="nombre" class="form-control" value="{{ grupo.nombre }}" required></div>
+    <div class="col-md-3">
+      <label>Turno</label>
+      <select name="turno" class="form-select">
+        <option {% if grupo.turno.value=='MATUTINO' %}selected{% endif %}>MATUTINO</option>
+        <option {% if grupo.turno.value=='VESPERTINO' %}selected{% endif %}>VESPERTINO</option>
+      </select>
+    </div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends "base.html" %} {% block content %}
+<h2 class="mb-3">Tablero de Horarios Completo</h2>
+
+<div class="row mb-3">
+  <div class="col-md-6">
+    <h5>Vista por Grupos</h5>
+  </div>
+  <div class="col-md-6 text-end">
+    <a href="{{ url_for('main.exportar_excel') }}" class="btn btn-success"
+      >Exportar a Excel</a
+    >
+    <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+  </div>
+</div>
+
+{% if grupos|length == 0 %}
+<div class="alert alert-warning">
+  <h5>No hay grupos registrados</h5>
+  <p>
+    Por favor, registra grupos primero en el menú
+    <a href="{{ url_for('main.grupo_nuevo') }}">Catálogos - Grupos</a>
+  </p>
+</div>
+{% else %}
+
+<ul class="nav nav-tabs mb-3" id="grupoTabs" role="tablist">
+  {% for g in grupos %}
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link {% if loop.first %}active{% endif %}"
+      id="tab-{{ g.id }}"
+      data-bs-toggle="tab"
+      data-bs-target="#grupo-{{ g.id }}"
+      type="button"
+      role="tab"
+    >
+      {{ g.turno.value[0] }} - {{ g.nombre }}
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+
+<div class="tab-content" id="grupoTabsContent">
+  {% for g in grupos %}
+  <div
+    class="tab-pane fade {% if loop.first %}show active{% endif %}"
+    id="grupo-{{ g.id }}"
+    role="tabpanel"
+  >
+    <div class="card bg-dark p-3">
+      <h4 class="mb-3">{{ g.nombre }} - {{ g.turno.value }}</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm tabla-horario">
+          <thead>
+            <tr class="table-secondary">
+              <th width="10%">Bloque</th>
+              <th>Lunes</th>
+              <th>Martes</th>
+              <th>Miércoles</th>
+              <th>Jueves</th>
+              <th>Viernes</th>
+            </tr>
+          </thead>
+          <tbody id="grid-{{ g.id }}">
+            {% for b in range(1, 9) %}
+            <tr>
+              <td class="text-center fw-bold">{{ b }}</td>
+              <td data-dia="LUNES" data-b="{{ b }}" class="celda-horario"></td>
+              <td data-dia="MARTES" data-b="{{ b }}" class="celda-horario"></td>
+              <td
+                data-dia="MIERCOLES"
+                data-b="{{ b }}"
+                class="celda-horario"
+              ></td>
+              <td data-dia="JUEVES" data-b="{{ b }}" class="celda-horario"></td>
+              <td
+                data-dia="VIERNES"
+                data-b="{{ b }}"
+                class="celda-horario"
+              ></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}
+
+<style>
+  .tabla-horario td {
+    min-height: 60px;
+    vertical-align: top;
+    padding: 8px !important;
+  }
+
+  .celda-horario {
+    background: #2b2b2b;
+    min-height: 60px;
+  }
+
+  .cell-slot {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    color: white;
+  }
+
+  .cell-slot .mat {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .cell-slot .doc {
+    font-size: 0.75rem;
+    opacity: 0.9;
+  }
+
+  @media print {
+    .btn,
+    .nav-tabs {
+      display: none;
+    }
+    .table {
+      font-size: 0.7rem;
+    }
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script>
+  const gruposIds = {{ grupos|map(attribute='id')|list|tojson }};
+
+  async function cargarTodosLosHorarios() {
+    console.log('Cargando horarios para', gruposIds.length, 'grupos...');
+
+    for (const grupoId of gruposIds) {
+      await cargarHorario(grupoId);
+    }
+
+    console.log('Todos los horarios cargados');
+  }
+
+  async function cargarHorario(grupoId) {
+    try {
+      console.log('Cargando horario del grupo', grupoId);
+
+      const res = await fetch(`/tablero/data?grupo_id=${grupoId}`);
+
+      if (!res.ok) {
+        console.error('Error HTTP', res.status, 'al cargar grupo', grupoId);
+        return;
+      }
+
+      const data = await res.json();
+      const grid = document.querySelector(`#grid-${grupoId}`);
+
+      if (!grid) {
+        console.error('No se encontró grid para grupo', grupoId);
+        return;
+      }
+
+      grid.querySelectorAll('.celda-horario').forEach(td => {
+        td.innerHTML = '';
+      });
+
+      if (!data.items || data.items.length === 0) {
+        console.log('Grupo', grupoId, 'sin horarios asignados');
+        return;
+      }
+
+      let clasesAsignadas = 0;
+      for (const it of data.items) {
+        for (let b = it.b1; b <= it.b2; b++) {
+          const selector = `td[data-dia="${it.dia}"][data-b="${b}"]`;
+          const td = grid.querySelector(selector);
+          if (td) {
+            td.innerHTML = `
+              <div class="cell-slot">
+                <div class="mat">${it.materia}</div>
+                <div class="doc">${it.docente}</div>
+              </div>
+            `;
+            clasesAsignadas++;
+          }
+        }
+      }
+
+      console.log('Grupo', grupoId + ':', data.items.length, 'sesiones,', clasesAsignadas, 'bloques');
+
+    } catch (error) {
+      console.error('Error al cargar grupo', grupoId + ':', error);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    console.log('Tablero iniciado');
+
+    if (gruposIds.length === 0) {
+      console.warn('No hay grupos para cargar');
+      return;
+    }
+
+    cargarTodosLosHorarios();
+  });
+</script>
+{% endblock %}

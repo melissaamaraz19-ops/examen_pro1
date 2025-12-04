@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Editar Disponibilidad</h3>
+<form method="post" class="card p-3">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <label>Docente</label>
+      <select name="docente_id" class="form-select">
+        {% for d in docentes %}<option value="{{ d.id }}" {% if d.id==disp.docente_id %}selected{% endif %}>{{ d.nombre }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Día</label>
+      <select name="dia" class="form-select">
+        {% for d in ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES'] %}<option {% if d==disp.dia %}selected{% endif %}>{{ d }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Turno</label>
+      <select name="turno" class="form-select">
+        <option {% if disp.turno.value=='MATUTINO' %}selected{% endif %}>MATUTINO</option>
+        <option {% if disp.turno.value=='VESPERTINO' %}selected{% endif %}>VESPERTINO</option>
+      </select>
+    </div>
+    <div class="col-md-1"><label>B1</label><input class="form-control" name="b1" type="number" min="1" max="8" value="{{ disp.bloque_inicio }}"></div>
+    <div class="col-md-1"><label>B2</label><input class="form-control" name="b2" type="number" min="1" max="8" value="{{ disp.bloque_fin }}"></div>
+  </div>
+  <div class="mt-2"><button class="btn btn-primary">Guardar</button></div>
+</form>
+{% endblock %}
